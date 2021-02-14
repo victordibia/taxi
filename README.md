@@ -1,5 +1,8 @@
-# Taxi Fare Prediction (on Google Cloud Platform)
-This repo is meant to demonstrate examples on how production ML pipelines can be orchestrated using platforms like Google Compute Platform.
+# Taxi Fare Prediction 
+This repo is meant to demonstrate examples on how production ML pipelines can be designed/orchestrated using platforms like Google Compute Platform.  It uses the NYC Taxi Cab dataset and seeks to predict a set of outcomes that are relevant for several end user personas.
+
+![Front End UI](docs/images/screen.jpg)
+#### Screenshot of the end user application.
 
 ## Architecture and Components
 
