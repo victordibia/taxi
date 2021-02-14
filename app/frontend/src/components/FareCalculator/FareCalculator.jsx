@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./curate.css";
 
 import DeckGL from "@deck.gl/react";
@@ -40,27 +40,26 @@ const FareCalculator = () => {
   const [selectedDestinationZone, setSelectedDestinationZone] = useState(4);
 
   let zoneData = [];
-  const zones = uniqBy(
-    nyZones.features.map((x, i) => {
-      let hold = x;
-      hold.properties["selected"] = false;
-      if (i === selectedSourceZone) {
-        hold.properties["selected"] = true;
-        hold.properties["selectedas"] = "source";
-      }
-      if (i === selectedDestinationZone) {
-        hold.properties["selected"] = true;
-        hold.properties["selectedas"] = "destination";
-      }
+  const zones = nyZones.features.map((x, i) => {
+    let hold = x;
+    hold.properties["selected"] = false;
+    hold.properties["index"] = i;
+    if (i === selectedSourceZone) {
+      hold.properties["selected"] = true;
+      hold.properties["selectedas"] = "source";
+    }
+    if (i === selectedDestinationZone) {
+      hold.properties["selected"] = true;
+      hold.properties["selectedas"] = "destination";
+    }
 
-      zoneData.push(hold);
-      return x.properties.zone;
-    })
-  );
+    zoneData.push(hold);
+    return x.properties.zone;
+  });
   const boroughs = uniqBy(nyZones.features.map((x) => x.properties.borough));
 
   const boroughColorMap = {};
-  const selectedColor = [255, 255, 100, 200];
+  const selectedColor = [255, 255, 100, 230];
   boroughs.forEach((x, i) => {
     boroughColorMap[x] = colorList[i];
   });
@@ -117,6 +116,17 @@ const FareCalculator = () => {
     }
   }
 
+  function zoneClick(e) {
+    // console.log(e.object.properties);
+    setSelectedDestinationZone(e.object.properties.index);
+  }
+
+  // console.log(zones.length, nyZones.features.length);
+
+  useEffect(() => {
+    document.title = `Taxi Advisor | Fare Prediction `;
+  }, []);
+
   return (
     <div className="">
       <div className="  ">
@@ -153,6 +163,7 @@ const FareCalculator = () => {
             getLineColor={[243, 244, 246, 180]}
             getRadius={100}
             getLineWidth={1}
+            onClick={zoneClick}
           />
         </DeckGL>
       </div>
