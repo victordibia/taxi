@@ -2,11 +2,9 @@
 
 This repo describes how to design and deploy an ML product (Taxi Advisor). It covers the entire end-to-end process - data ingest, model training/evaluation, serving + frontend UX. 
 
-The Taxi Advisor use case uses the NYC Taxi Cab dataset and seeks to predict a set of outcomes that are relevant for several end user personas (trip time, trip fare).
+Taxi Advisor  uses the [New York Taxi Cab](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page) dataset. It's UI allows users to specify trip parameters (Start and End Zones) and provides predictions on trip time, trip fare.
 
-![Front End UI](docs/images/screen.jpg)
-##### Screenshot of the end user application.
-
+![Front End UI](docs/images/screen.jpg) 
 
 
 ## Architecture and Components
