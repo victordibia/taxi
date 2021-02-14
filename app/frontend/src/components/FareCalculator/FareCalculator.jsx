@@ -12,9 +12,6 @@ import LocationSelector from "./LocationSelector/LocationSelector";
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 const nyZones = require("../../data/nyzones.geo.json");
 
-const zones = uniqBy(nyZones.features.map((x) => x.properties.zone));
-const boroughs = uniqBy(nyZones.features.map((x) => x.properties.borough));
-
 const colorOpacity = 200;
 const colorList = [
   [239, 68, 68, colorOpacity],
@@ -24,10 +21,6 @@ const colorList = [
   [139, 92, 246, colorOpacity],
   [236, 72, 153, colorOpacity],
 ];
-const boroughColorMap = {};
-boroughs.forEach((x, i) => {
-  boroughColorMap[x] = colorList[i];
-});
 
 let isHovering = false;
 
@@ -42,36 +35,35 @@ function arrayToRGB(arr) {
   );
 }
 
-function processZoneHover(e) {
-  isHovering = Boolean(e);
-  const properties = e.object?.properties;
-  const id = properties?.LocationID;
-  if (id && properties?.borough) {
-    const tooltipitem = document.getElementById("tooltipitem");
-    tooltipitem.style.top = e.y - 10 + "px";
-    tooltipitem.style.left = e.x + 15 + "px";
-
-    tooltipitem.classList.remove("hidden");
-    document.getElementById("tooltipborough").textContent = properties?.borough;
-    document.getElementById("tooltipzone").textContent = properties?.zone;
-    document.getElementById("tooltipbar").style.background = arrayToRGB(
-      boroughColorMap[properties?.borough]
-    );
-  }
-}
-
-function deckHover(e) {
-  if (e.layer?.id === "nyzones") {
-    processZoneHover(e);
-  } else {
-    isHovering = false;
-    document.getElementById("tooltipitem").classList.add("hidden");
-  }
-}
-
 const FareCalculator = () => {
   const [selectedSourceZone, setSelectedSourceZone] = useState(0);
   const [selectedDestinationZone, setSelectedDestinationZone] = useState(4);
+
+  let zoneData = [];
+  const zones = uniqBy(
+    nyZones.features.map((x, i) => {
+      let hold = x;
+      hold.properties["selected"] = false;
+      if (i === selectedSourceZone) {
+        hold.properties["selected"] = true;
+        hold.properties["selectedas"] = "source";
+      }
+      if (i === selectedDestinationZone) {
+        hold.properties["selected"] = true;
+        hold.properties["selectedas"] = "destination";
+      }
+
+      zoneData.push(hold);
+      return x.properties.zone;
+    })
+  );
+  const boroughs = uniqBy(nyZones.features.map((x) => x.properties.borough));
+
+  const boroughColorMap = {};
+  const selectedColor = [255, 255, 100, 200];
+  boroughs.forEach((x, i) => {
+    boroughColorMap[x] = colorList[i];
+  });
 
   const selections = {
     config: {
@@ -95,6 +87,36 @@ const FareCalculator = () => {
     bearing: 0,
   };
 
+  // console.log(zoneData, nyZones.features);
+
+  function processZoneHover(e) {
+    isHovering = Boolean(e);
+    const properties = e.object?.properties;
+    const id = properties?.LocationID;
+    if (id && properties?.borough) {
+      const tooltipitem = document.getElementById("tooltipitem");
+      tooltipitem.style.top = e.y - 10 + "px";
+      tooltipitem.style.left = e.x + 15 + "px";
+
+      tooltipitem.classList.remove("hidden");
+      document.getElementById("tooltipborough").textContent =
+        properties?.borough;
+      document.getElementById("tooltipzone").textContent = properties?.zone;
+      document.getElementById("tooltipbar").style.background = arrayToRGB(
+        boroughColorMap[properties?.borough]
+      );
+    }
+  }
+
+  function deckHover(e) {
+    if (e.layer?.id === "nyzones") {
+      processZoneHover(e);
+    } else {
+      isHovering = false;
+      document.getElementById("tooltipitem").classList.add("hidden");
+    }
+  }
+
   return (
     <div className="">
       <div className="  ">
@@ -114,7 +136,7 @@ const FareCalculator = () => {
 
           <GeoJsonLayer
             id="nyzones"
-            data={nyZones.features}
+            data={zoneData}
             pickable={true}
             opacity={0.8}
             // stroked={true}
@@ -122,7 +144,12 @@ const FareCalculator = () => {
             // extruded={true}
             // lineWidthScale={2}
             lineWidthMinPixels={1}
-            getFillColor={(d) => boroughColorMap[d.properties.borough]}
+            getFillColor={(d) => {
+              if (d.properties.selected) {
+                return selectedColor;
+              }
+              return boroughColorMap[d.properties.borough];
+            }}
             getLineColor={[243, 244, 246, 180]}
             getRadius={100}
             getLineWidth={1}
