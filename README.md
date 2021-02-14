@@ -29,5 +29,6 @@ Initial high level list of tasks:
 
 - [x] Data exploration: Explore interesting data insights, data transformation tasks etc 
 - [x] Model Training: Explore a set of models, automated hyperparameter search, distributed training, model evaluation etc
-- [ ] Model Serving: Promoting good models to production, serving predictions over an api enddpoint 
+- [x] Automated pipeline (Composer) to run model training, export and serving.
+- [ ] Model Serving: Promoting good models to production, serving predictions over an api endpoint 
 - [ ] Front end: User interface for exploring predictions.
