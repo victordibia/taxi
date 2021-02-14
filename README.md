@@ -1,8 +1,13 @@
-# Taxi Fare Prediction 
-This repo is meant to demonstrate examples on how production ML pipelines can be designed/orchestrated using platforms like Google Compute Platform.  It uses the NYC Taxi Cab dataset and seeks to predict a set of outcomes that are relevant for several end user personas.
+# Taxi Advisor
+
+This repo describes how to design and deploy an ML product (Taxi Advisor). It covers the entire end-to-end process - data ingest, model training/evaluation, serving + frontend UX. 
+
+The Taxi Advisor use case uses the NYC Taxi Cab dataset and seeks to predict a set of outcomes that are relevant for several end user personas (trip time, trip fare).
 
 ![Front End UI](docs/images/screen.jpg)
-#### Screenshot of the end user application.
+##### Screenshot of the end user application.
+
+
 
 ## Architecture and Components
 
