@@ -4,7 +4,9 @@ import { Select, DatePicker } from "antd";
 const { Option } = Select;
 
 const LocationSelector = (props) => {
-  const zones = props.zones || [];
+  const zones = props.selections.zones || [];
+  const boroughs = props.selections.boroughs || [];
+  const colorMap = props.selections.boroughColorMap || {};
   const zoneDropdownWidth = 250;
 
   const config = props.selections.config;
@@ -19,9 +21,27 @@ const LocationSelector = (props) => {
       </Option>
     );
   });
+
+  const borougLegendList = boroughs.map((data, i) => {
+    const c = colorMap[data];
+    const color = "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
+
+    return (
+      <span key={"borough" + i} className="text-sm mr-2 inline-block ">
+        {" "}
+        <span
+          style={{
+            backgroundColor: color,
+          }}
+          className={"w-3 inline-block h-3 mr-1 rounded bg-gray-500 "}
+        ></span>
+        <span>{data}</span>
+      </span>
+    );
+  });
   return (
     zones.length > 0 && (
-      <div className="mt-2 shadow  inline-block rounded   bg-gray-50   bg-opacity-100">
+      <div className="mt-2 shadow rounded   bg-gray-50   bg-opacity-100">
         <div
           id="header"
           className="mb-2 bg-gray-300 rounded rounded-b-none text-sm font-semibold  py-3 px-4"
@@ -60,6 +80,7 @@ const LocationSelector = (props) => {
               id="destinationzone"
               defaultValue={zones[selectedDestinationZone]}
               showSearch
+              value={zones[selectedDestinationZone]}
               style={{ width: zoneDropdownWidth }}
               placeholder="Select a Zone"
               optionFilterProp="children"
@@ -81,6 +102,8 @@ const LocationSelector = (props) => {
               // onOk={onOk}
             />
           </div>
+
+          <div className="mt-3  w-60 ">{borougLegendList}</div>
         </div>
       </div>
     )

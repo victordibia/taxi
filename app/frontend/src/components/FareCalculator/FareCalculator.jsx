@@ -75,6 +75,9 @@ const FareCalculator = () => {
         destination: setSelectedDestinationZone,
       },
     },
+    boroughs: boroughs,
+    zones: zones,
+    boroughColorMap: boroughColorMap,
   };
 
   // Viewport settings
@@ -116,10 +119,17 @@ const FareCalculator = () => {
     }
   }
 
-  function zoneClick(e) {
-    // console.log(e.object.properties);
-    setSelectedDestinationZone(e.object.properties.index);
+  function deckClick(e) {
+    // console.log(e);
+    if (e.layer?.id === "nyzones") {
+      setSelectedDestinationZone(e.object.properties.index);
+    }
   }
+
+  // function zoneClick(e) {
+  //   // console.log(e.object.properties);
+  //   setSelectedDestinationZone(e.object.properties.index);
+  // }
 
   // console.log(zones.length, nyZones.features.length);
 
@@ -135,6 +145,8 @@ const FareCalculator = () => {
           initialViewState={INITIAL_VIEW_STATE}
           controller={true}
           onHover={deckHover}
+          onClick={deckClick}
+          controller={{ doubleClickZoom: false }}
         >
           <MapView id="map" width="100%" controller={true}>
             <StaticMap
@@ -163,7 +175,7 @@ const FareCalculator = () => {
             getLineColor={[243, 244, 246, 180]}
             getRadius={100}
             getLineWidth={1}
-            onClick={zoneClick}
+            // onClick={zoneClick}
           />
         </DeckGL>
       </div>
@@ -187,11 +199,7 @@ const FareCalculator = () => {
       </div>
 
       <div className="absolute ml-2 ">
-        <LocationSelector
-          zones={zones}
-          boroughs={boroughs}
-          selections={selections}
-        />
+        <LocationSelector selections={selections} />
       </div>
     </div>
   );
