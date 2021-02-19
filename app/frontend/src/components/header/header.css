@@ -1,7 +1,7 @@
 .navbarlinks a.active:hover,
 .navbarlinks a.active,
 .navbarlinks.selected {
-  border-bottom: 4px #0062ff solid;
+  border-bottom: 4px #3b82f6 solid;
 }
 .navbarlinks a {
   text-decoration: none;

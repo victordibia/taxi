@@ -1,5 +1,5 @@
 import moment from "moment";
-import { Select, DatePicker } from "antd";
+import { Select, DatePicker, Button } from "antd";
 // import { loadJSONData } from "../../helperfunctions/HelperFunctions";
 const { Option } = Select;
 
@@ -22,6 +22,8 @@ const LocationSelector = (props) => {
     );
   });
 
+  console.log(moment().format("YY-MM-DD HH:mm"));
+
   const borougLegendList = boroughs.map((data, i) => {
     const c = colorMap[data];
     const color = "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
@@ -39,6 +41,11 @@ const LocationSelector = (props) => {
       </span>
     );
   });
+
+  function predictButtonClick(e) {
+    console.log(document.getElementById("tripdate").value);
+  }
+
   return (
     zones.length > 0 && (
       <div className="mt-2 shadow rounded   bg-gray-50   bg-opacity-100">
@@ -50,7 +57,11 @@ const LocationSelector = (props) => {
           Specify Trip Details
         </div>
 
-        <div id="body" className="mb-2 p-4 pt-2">
+        <div className="m-4 p-2 pl-3 pb-0 bg-gray-200 rounded">
+          {" "}
+          <div className="pb-2  w-56 ">{borougLegendList}</div>{" "}
+        </div>
+        <div id="body" className="mb-2 p-4 pt-0">
           <div className="">
             <div className="text-xs mb-1 text-gray-500">
               {" "}
@@ -95,6 +106,7 @@ const LocationSelector = (props) => {
           <div className="mt-3 ">
             <div className="text-xs mb-1 text-gray-500"> Trip Time</div>
             <DatePicker
+              id="tripdate"
               style={{ width: zoneDropdownWidth }}
               showTime={{ format: "HH:mm" }}
               defaultValue={moment()}
@@ -103,7 +115,17 @@ const LocationSelector = (props) => {
             />
           </div>
 
-          <div className="mt-3  w-60 ">{borougLegendList}</div>
+          <div className="mt-3">
+            <Button
+              style={{ zoneDropdownWidth }}
+              onClick={predictButtonClick}
+              type="primary"
+              block
+            >
+              {" "}
+              Predict Fare{" "}
+            </Button>
+          </div>
         </div>
       </div>
     )

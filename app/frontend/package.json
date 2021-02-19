@@ -1,8 +1,7 @@
 {
   "name": "app",
   "version": "0.1.0",
-  "private": true,
-  "homepage": "https://victordibia.com/taxi/",
+  "private": true, 
   "dependencies": {
     "@carbon/icons-react": "^10.18.0",
     "@craco/craco": "^6.0.0",
@@ -33,6 +32,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
+    "buildae": "craco build && cp -r build ../backend/appengine",
     "test": "craco test",
     "eject": "react-scripts eject",
     "deploy": "yarn build && gh-pages -d build"
