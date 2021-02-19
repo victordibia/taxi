@@ -1,25 +1,13 @@
-# Copyright 2018 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Copyright 2021 Victor Dibia
 
 # [START gae_python38_app]
 # [START gae_python3_app]
-from flask import Flask, render_template
-
+from flask import Flask, request, render_template, jsonify
+from modules.predict import get_predictions
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
-# app = Flask(__name__)
+
 static_folder_root = "build"
 app = Flask(__name__, static_url_path='',
             static_folder=static_folder_root, template_folder=static_folder_root)
@@ -27,15 +15,17 @@ app = Flask(__name__, static_url_path='',
 
 @app.route('/')
 def hello():
-    """Return a friendly HTTP greeting."""
+    """Return application landing page."""
     # return 'Hello World!'
     return render_template('index.html')
 
 
-@app.route('/predict')
-def predit():
-    """Return a friendly HTTP greeting."""
-    return 'predict!'
+@app.route('/predict', methods=['POST'])
+def predict():
+    """Return prediction response."""
+    if request.method == 'POST':
+        data = request.get_json()
+    return jsonify(get_predictions(data))
 
 
 if __name__ == '__main__':

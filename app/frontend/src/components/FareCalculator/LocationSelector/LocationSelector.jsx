@@ -1,9 +1,13 @@
 import moment from "moment";
 import { Select, DatePicker, Button } from "antd";
-// import { loadJSONData } from "../../helperfunctions/HelperFunctions";
+import { postJSONData } from "../../helperfunctions/HelperFunctions";
+import { useState } from "react";
 const { Option } = Select;
 
 const LocationSelector = (props) => {
+  const [fetchingPredictions, setIsFetchingPredictions] = useState(false);
+  const [predictions, setPredictions] = useState(null);
+
   const zones = props.selections.zones || [];
   const boroughs = props.selections.boroughs || [];
   const colorMap = props.selections.boroughColorMap || {};
@@ -21,8 +25,6 @@ const LocationSelector = (props) => {
       </Option>
     );
   });
-
-  console.log(moment().format("YY-MM-DD HH:mm"));
 
   const borougLegendList = boroughs.map((data, i) => {
     const c = colorMap[data];
@@ -42,8 +44,37 @@ const LocationSelector = (props) => {
     );
   });
 
+  function fetchPredictions(data) {
+    const predictionUrl = "http://localhost:8080/predict";
+    const predictions = postJSONData(predictionUrl, data);
+
+    setIsFetchingPredictions(true);
+    predictions
+      .then((data) => {
+        if (data) {
+          console.log(data);
+          setIsFetchingPredictions(false);
+          setPredictions(data);
+        }
+      })
+      .catch(function (err) {
+        console.log("Failed to fetch predictions", err);
+        setIsFetchingPredictions(false);
+      });
+  }
+
   function predictButtonClick(e) {
-    console.log(document.getElementById("tripdate").value);
+    const tripDate = document.getElementById("tripdate").value;
+    const sourceZone = zones[selectedSourceZone];
+    const destinationZone = zones[selectedDestinationZone];
+    console.log(tripDate, sourceZone, destinationZone);
+
+    const postData = {
+      date: tripDate,
+      source: sourceZone,
+      destination: destinationZone,
+    };
+    fetchPredictions(postData);
   }
 
   return (
@@ -121,11 +152,31 @@ const LocationSelector = (props) => {
               onClick={predictButtonClick}
               type="primary"
               block
+              loading={fetchingPredictions}
             >
               {" "}
               Predict Fare{" "}
             </Button>
           </div>
+
+          {predictions && (
+            <div className="mt-3 text-white  grid grid-cols-2 gap-2">
+              <div className="text-center p-1 bg-green-500 rounded">
+                <span className="text-xl font-semibold">
+                  {" "}
+                  {predictions[0][0].toFixed(1)}{" "}
+                </span>{" "}
+                mins
+              </div>
+              <div className="text-center p-1 bg-green-500 rounded">
+                <span className="text-xl font-semibold">
+                  {" "}
+                  {predictions[0][1].toFixed(2)}
+                </span>{" "}
+                $
+              </div>
+            </div>
+          )}
         </div>
       </div>
     )
