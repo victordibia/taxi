@@ -13,19 +13,21 @@ This repo provides guidance on how to design and deploy an ML product (Taxi Advi
 
 - Data is ingested from the The New York City Taxi and Limousine Commission (TLC).
 - A pair of models (Random Forest, MLP) are trained (multitask mode) to both predict fare and trip time using trip parameters (pickup locationID, drop off locationID and date/time). Model is then exported to Cloud Storage.
-- Model is exported imported from Cloud Storage and served (with autoscaling) using Google Cloud AI Platform
+- Model is exported imported from Cloud Storage and served (with autoscaling) using Google Cloud AI Platform [prediction API](https://cloud.google.com/ai-platform/prediction/docs/getting-started-scikit-xgboost).
 - Front end application collects user trip parameters and queries Cloud AI endpoint.
   
 
 
-##  Components
- 
-- [Data Ingest](notebooks). The [New York Taxi Cab](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page) is used for this demo.
+##  Components in this Repo
+
+The links below show how sections of Taxi Advisor are implemented.
+
+- [Data Ingest](notebooks). 
 - [Model Training](notebooks): Train a set of models (decision tree, feed forward DNN) to predict fares _and_ trip time given properties of a trip (start and end location id, time of day, etc). Write trained model to a storage bucket.
 - Model Serving
   - Cloud AI Platform (Model Serving) -> load trained model from GCS, serve over end point 
 - [End User Application](app)
-  - App Engine (Front End App) -> serve front end app to consume API end point.  
+  - App Engine (Front End App) -> serve front end app to consume CloudAI API end point.  
 
 ## TODOs
 
