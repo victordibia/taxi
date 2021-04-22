@@ -1,6 +1,6 @@
 ## Taxi Advisor
 
-> Ty a live demo [here](https://taxiadvisor.victordibia.com/)
+> Ty a live demo - [https://taxiadvisor.victordibia.com](https://taxiadvisor.victordibia.com/)
 
 
 This repo provides guidance on how to design and deploy an ML product (Taxi Advisor). It covers the  end-to-end process - data ingest, model training/evaluation, serving + frontend UX. The Taxi Advisor  example uses the [New York Taxi Cab](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page) dataset and allows users to specify trip parameters (pickup Zone, drop off Zone and trip date/time) and provides predictions on trip duration and trip fare.
