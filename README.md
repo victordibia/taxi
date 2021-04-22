@@ -9,7 +9,7 @@ This repo provides guidance on how to design and deploy an ML product (Taxi Advi
 
 
 ## How It Works
-![System Architecture](docs/images/ny_taxi_trip_prediction.png)
+![System Architecture](docs/images/taxipredictions.png)
 
 - Data is ingested from the The New York City Taxi and Limousine Commission (TLC).
 - A pair of models (Random Forest, MLP) are trained (multitask mode) to both predict fare and trip time using trip parameters (pickup locationID, drop off locationID and date/time). Model is then exported to Cloud Storage.
