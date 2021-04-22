@@ -1,32 +1,47 @@
-# Taxi Advisor
+## Taxi Advisor
 
-This repo describes how to design and deploy an ML product (Taxi Advisor). It covers the entire end-to-end process - data ingest, model training/evaluation, serving + frontend UX. 
+> Ty a live demo [here](http://taxiadvisor.victordibia.com/)
 
-Taxi Advisor  uses the [New York Taxi Cab](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page) dataset. It's UI allows users to specify trip parameters (Start and End Zones) and provides predictions on trip time, trip fare.
+
+This repo provides guidance on how to design and deploy an ML product (Taxi Advisor). It covers the  end-to-end process - data ingest, model training/evaluation, serving + frontend UX. The Taxi Advisor  example uses the [New York Taxi Cab](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page) dataset and allows users to specify trip parameters (pickup Zone, drop off Zone and trip date/time) and provides predictions on trip duration and trip fare.
 
 ![Front End UI](docs/images/screen.jpg) 
 
 
-## Architecture and Components
-
+## How It Works
 ![System Architecture](docs/images/ny_taxi_trip_prediction.png)
 
-- Data [New York Taxi Cab](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
-- Pipeline Orchestration (Composer)
-  - Composer Block -> Data Ingest  (load csv files), write to GCS
-  - DataProc (Data Cleaning) -> ingest csv from GCS, clean and write result to GCS 
-  - Cloud AI Platform (Model Training) -> Train a model (decision tree, feed forward DNN) to predict fares or time given properties of a trip (start and end location, time of day, etc). Write trained model to GCS
+- Data is ingested from the The New York City Taxi and Limousine Commission (TLC).
+- A pair of models (Random Forest, MLP) are trained (multitask mode) to both predict fare and trip time using trip parameters (pickup locationID, drop off locationID and date/time). Model is then exported to Cloud Storage.
+- Model is exported imported from Cloud Storage and served (with autoscaling) using Google Cloud AI Platform
+- Front end application collects user trip parameters and queries Cloud AI endpoint.
+  
+
+
+##  Components
+ 
+- [Data Ingest](notebooks). The [New York Taxi Cab](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page) is used for this demo.
+- [Model Training](notebooks): Train a set of models (decision tree, feed forward DNN) to predict fares _and_ trip time given properties of a trip (start and end location id, time of day, etc). Write trained model to a storage bucket.
+- Model Serving
   - Cloud AI Platform (Model Serving) -> load trained model from GCS, serve over end point 
-  - App Engine (Front End App) -> serve front end app to consume API end point. 
-- Timeline: Two months .. Expected completion - end of Feb 2021
-- ML Technologies (decision tree, feed forward DNN)
+- [End User Application](app)
+  - App Engine (Front End App) -> serve front end app to consume API end point.  
 
 ## TODOs
 
 Initial high level list of tasks: 
 
-- [x] Data exploration: Explore interesting data insights, data transformation tasks etc 
-- [x] Model Training: Explore a set of models, automated hyperparameter search, distributed training, model evaluation etc
-- [ ] Automated pipeline (Composer) to run model training, export and serving.
-- [ ] Model Serving: Promoting good models to production, serving predictions over an api endpoint 
+- [x] Data exploration
+  - [x] Explore interesting data insights, data transformation tasks etc 
+  - [ ] Automate preprocessing using Spark
+- [x] Model Training: 
+  - [ ] Explore a initial set of multitask models (Random Forests, MLP), 
+  - [ ] Automated hyperparameter search, 
+  - [ ] Distributed training and evaluation etc. 
+  - [ ] Explore bayesian models that provide principled estimates of uncertainty.
+- [ ] Automated pipeline (Composer) to run model training, evaluation, export and serving.
+  - [ ] Automatically promote good models to production, 
+- [x] Model Serving:  
+  - [ ] Serving predictions over an Cloud AI endpoint 
 - [x] Front end: User interface for exploring predictions.
+  - [x] App engine serving frontend

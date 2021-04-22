@@ -1,4 +1,13 @@
 import { shuffle } from "lodash";
+import ReactGA from "react-ga";
+
+ReactGA.initialize(process.env.REACT_APP_GA_ID);
+export function GaPageView() {
+  const pagePath =
+    window.location.host + window.location.pathname + window.location.search;
+  ReactGA.pageview(pagePath);
+  // console.log(pagePath);
+}
 
 export function abbreviateString(value, maxLength) {
   if (value.length <= maxLength) {

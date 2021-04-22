@@ -1,12 +1,20 @@
 import moment from "moment";
-import { Select, DatePicker, Button } from "antd";
+import { Select, DatePicker, Button, Alert } from "antd";
 import { postJSONData } from "../../helperfunctions/HelperFunctions";
 import { useState } from "react";
 const { Option } = Select;
 
 const LocationSelector = (props) => {
+  const predictionUrl =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+      ? "http://localhost:8080/predict"
+      : "/predict";
+
+  // State Variables
   const [fetchingPredictions, setIsFetchingPredictions] = useState(false);
   const [predictions, setPredictions] = useState(null);
+  const [fetchStatus, setFetchStatus] = useState({ status: true, message: "" });
 
   const zones = props.selections.zones || [];
   const boroughs = props.selections.boroughs || [];
@@ -17,6 +25,7 @@ const LocationSelector = (props) => {
   const selectedSourceZone = config.getter.source;
   const selectedDestinationZone = config.getter.destination;
 
+  // console.log(selectedDestinationZone);
   const zonesList = zones.map((data, i) => {
     return (
       <Option value={data} key={"locrow" + i} index={i}>
@@ -45,21 +54,28 @@ const LocationSelector = (props) => {
   });
 
   function fetchPredictions(data) {
-    const predictionUrl = "http://localhost:8080/predict";
     const predictions = postJSONData(predictionUrl, data);
 
     setIsFetchingPredictions(true);
     predictions
       .then((data) => {
         if (data) {
-          console.log(data);
+          // console.log(data);
           setIsFetchingPredictions(false);
+          setFetchStatus({
+            status: true,
+            message: "Successfully fetched predictions.",
+          });
           setPredictions(data);
         }
       })
       .catch(function (err) {
         console.log("Failed to fetch predictions", err);
         setIsFetchingPredictions(false);
+        setFetchStatus({
+          status: false,
+          message: "Failed to reach predictions server. Try again later.",
+        });
       });
   }
 
@@ -67,7 +83,7 @@ const LocationSelector = (props) => {
     const tripDate = document.getElementById("tripdate").value;
     const sourceZone = zones[selectedSourceZone];
     const destinationZone = zones[selectedDestinationZone];
-    console.log(tripDate, sourceZone, destinationZone);
+    // console.log(tripDate, sourceZone, destinationZone);
 
     const postData = {
       date: tripDate,
@@ -159,8 +175,24 @@ const LocationSelector = (props) => {
             </Button>
           </div>
 
+          {/* <div className="mt-3">
+            Failed ...
+            <Alert
+              message="Error Text"
+              description="Error Description Error Description Error Description Error Description Error Description Error Description"
+              type="error"
+              closable
+              // onClose={onClose}
+            />
+          </div> */}
+
           {predictions && (
-            <div className="mt-3 text-white  grid grid-cols-2 gap-2">
+            <div
+              className={
+                "mt-3 text-white   grid grid-cols-2 gap-2 " +
+                (fetchingPredictions ? " opacity-50 pointer-events-none " : "")
+              }
+            >
               <div className="text-center p-1 bg-green-500 rounded">
                 <span className="text-xl font-semibold">
                   {" "}

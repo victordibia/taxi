@@ -7,6 +7,7 @@ import { StaticMap } from "react-map-gl";
 import { MapView } from "@deck.gl/core";
 import uniqBy from "lodash/uniqBy";
 import LocationSelector from "./LocationSelector/LocationSelector";
+import { GaPageView } from "../helperfunctions/HelperFunctions";
 
 // Set your mapbox access token here
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -36,8 +37,8 @@ function arrayToRGB(arr) {
 }
 
 const FareCalculator = () => {
-  const [selectedSourceZone, setSelectedSourceZone] = useState(0);
-  const [selectedDestinationZone, setSelectedDestinationZone] = useState(4);
+  const [selectedSourceZone, setSelectedSourceZone] = useState(73);
+  const [selectedDestinationZone, setSelectedDestinationZone] = useState(42);
 
   let zoneData = [];
   const zones = nyZones.features.map((x, i) => {
@@ -135,6 +136,7 @@ const FareCalculator = () => {
 
   useEffect(() => {
     document.title = `Taxi Advisor | Fare Prediction `;
+    GaPageView();
   }, []);
 
   return (
