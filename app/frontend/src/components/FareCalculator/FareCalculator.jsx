@@ -8,6 +8,7 @@ import { MapView } from "@deck.gl/core";
 import uniqBy from "lodash/uniqBy";
 import LocationSelector from "./LocationSelector/LocationSelector";
 import { GaPageView } from "../helperfunctions/HelperFunctions";
+import Footer from "./Footer";
 
 // Set your mapbox access token here
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -203,6 +204,7 @@ const FareCalculator = () => {
       <div className="absolute ml-2 ">
         <LocationSelector selections={selections} />
       </div>
+      <Footer />
     </div>
   );
 };

@@ -93,89 +93,105 @@ const LocationSelector = (props) => {
     fetchPredictions(postData);
   }
 
+  <div className="w-full rounded-tl p-2 px-4 absolute bottom-0 right-0 bg-gray-300">
+    <div className="    border-l-0 border-r-0 border-t-0 border-dashed   border-gray-600">
+      Google has generously supported this work by providing Google Cloud
+      credits.
+    </div>
+  </div>;
+
   return (
     zones.length > 0 && (
-      <div className="mt-2 shadow rounded   bg-gray-50   bg-opacity-100">
-        <div
-          id="header"
-          className="mb-2 bg-gray-300 rounded rounded-b-none text-sm font-semibold  py-3 px-4"
-        >
-          {" "}
-          Specify Trip Details
+      <div className="mt-2 shadow   bg-opacity-100">
+        <div className="mb-3 p-3 rounded   bg-gray-50   ">
+          <div className="font-semibold pb-1">Welcome!</div>
+          <div className="w-64 text-sm">
+            This page demonstrates how a machine learning model can be used to
+            predict trip time and fare taxi rides in New York.
+          </div>
         </div>
 
-        <div className="m-4 p-2 pl-3 pb-0 bg-gray-200 rounded">
-          {" "}
-          <div className="pb-2  w-56 ">{borougLegendList}</div>{" "}
-        </div>
-        <div id="body" className="mb-2 p-4 pt-0">
-          <div className="">
-            <div className="text-xs mb-1 text-gray-500">
-              {" "}
-              From: {zones[selectedSourceZone]}{" "}
+        <div className="rounded   bg-gray-50   ">
+          <div
+            id="header"
+            className="mb-2 bg-gray-300 rounded rounded-b-none text-sm font-semibold  py-3 px-4"
+          >
+            {" "}
+            Specify Trip Details
+          </div>
+
+          <div className="m-4 p-2 pl-3 pb-0 bg-gray-200 rounded">
+            {" "}
+            <div className="pb-2  w-56 ">{borougLegendList}</div>{" "}
+          </div>
+          <div id="body" className="mb-2 p-4 pt-0">
+            <div className="">
+              <div className="text-xs mb-1 text-gray-500">
+                {" "}
+                From: {zones[selectedSourceZone]}{" "}
+              </div>
+              <Select
+                id="sourcezone"
+                defaultValue={zones[selectedSourceZone]}
+                showSearch
+                style={{ width: zoneDropdownWidth }}
+                placeholder="Select a Zone"
+                optionFilterProp="children"
+                onChange={(value, row) => {
+                  config.setter.source(row.index);
+                }}
+              >
+                {zonesList}
+              </Select>
             </div>
-            <Select
-              id="sourcezone"
-              defaultValue={zones[selectedSourceZone]}
-              showSearch
-              style={{ width: zoneDropdownWidth }}
-              placeholder="Select a Zone"
-              optionFilterProp="children"
-              onChange={(value, row) => {
-                config.setter.source(row.index);
-              }}
-            >
-              {zonesList}
-            </Select>
-          </div>
 
-          <div className="mt-3 mb-2">
-            <div className="text-xs mb-1 text-gray-500">
-              {" "}
-              To: {zones[selectedDestinationZone]}{" "}
+            <div className="mt-3 mb-2">
+              <div className="text-xs mb-1 text-gray-500">
+                {" "}
+                To: {zones[selectedDestinationZone]}{" "}
+              </div>
+              <Select
+                id="destinationzone"
+                defaultValue={zones[selectedDestinationZone]}
+                showSearch
+                value={zones[selectedDestinationZone]}
+                style={{ width: zoneDropdownWidth }}
+                placeholder="Select a Zone"
+                optionFilterProp="children"
+                onChange={(value, row) => {
+                  config.setter.destination(row.index);
+                }}
+              >
+                {zonesList}
+              </Select>
             </div>
-            <Select
-              id="destinationzone"
-              defaultValue={zones[selectedDestinationZone]}
-              showSearch
-              value={zones[selectedDestinationZone]}
-              style={{ width: zoneDropdownWidth }}
-              placeholder="Select a Zone"
-              optionFilterProp="children"
-              onChange={(value, row) => {
-                config.setter.destination(row.index);
-              }}
-            >
-              {zonesList}
-            </Select>
-          </div>
 
-          <div className="mt-3 ">
-            <div className="text-xs mb-1 text-gray-500"> Trip Time</div>
-            <DatePicker
-              id="tripdate"
-              style={{ width: zoneDropdownWidth }}
-              showTime={{ format: "HH:mm" }}
-              defaultValue={moment()}
-              // onChange={onChange}
-              // onOk={onOk}
-            />
-          </div>
+            <div className="mt-3 ">
+              <div className="text-xs mb-1 text-gray-500"> Trip Time</div>
+              <DatePicker
+                id="tripdate"
+                style={{ width: zoneDropdownWidth }}
+                showTime={{ format: "HH:mm" }}
+                defaultValue={moment()}
+                // onChange={onChange}
+                // onOk={onOk}
+              />
+            </div>
 
-          <div className="mt-3">
-            <Button
-              style={{ zoneDropdownWidth }}
-              onClick={predictButtonClick}
-              type="primary"
-              block
-              loading={fetchingPredictions}
-            >
-              {" "}
-              Predict Fare{" "}
-            </Button>
-          </div>
+            <div className="mt-3">
+              <Button
+                style={{ zoneDropdownWidth }}
+                onClick={predictButtonClick}
+                type="primary"
+                block
+                loading={fetchingPredictions}
+              >
+                {" "}
+                Predict Fare{" "}
+              </Button>
+            </div>
 
-          {/* <div className="mt-3">
+            {/* <div className="mt-3">
             Failed ...
             <Alert
               message="Error Text"
@@ -186,29 +202,32 @@ const LocationSelector = (props) => {
             />
           </div> */}
 
-          {predictions && (
-            <div
-              className={
-                "mt-3 text-white   grid grid-cols-2 gap-2 " +
-                (fetchingPredictions ? " opacity-50 pointer-events-none " : "")
-              }
-            >
-              <div className="text-center p-1 bg-green-500 rounded">
-                <span className="text-xl font-semibold">
-                  {" "}
-                  {predictions[0][0].toFixed(1)}{" "}
-                </span>{" "}
-                mins
+            {predictions && (
+              <div
+                className={
+                  "mt-3 text-white   grid grid-cols-2 gap-2 " +
+                  (fetchingPredictions
+                    ? " opacity-50 pointer-events-none "
+                    : "")
+                }
+              >
+                <div className="text-center p-1 bg-green-500 rounded">
+                  <span className="text-xl font-semibold">
+                    {" "}
+                    {predictions[0][0].toFixed(1)}{" "}
+                  </span>{" "}
+                  mins
+                </div>
+                <div className="text-center p-1 bg-green-500 rounded">
+                  <span className="text-xl font-semibold">
+                    {" "}
+                    {predictions[0][1].toFixed(2)}
+                  </span>{" "}
+                  $
+                </div>
               </div>
-              <div className="text-center p-1 bg-green-500 rounded">
-                <span className="text-xl font-semibold">
-                  {" "}
-                  {predictions[0][1].toFixed(2)}
-                </span>{" "}
-                $
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     )
