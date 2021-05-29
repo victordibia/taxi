@@ -46,4 +46,8 @@ Initial high level list of tasks:
 - [x] Model Serving:  
   - [ ] Serving predictions over an Cloud AI endpoint 
 - [x] Front end: User interface for exploring predictions.
-  - [x] App engine serving frontend
+  - [x] App engine serving frontend 
+
+## Acknowledgement 
+
+Google has generously supported this work by providing Google Cloud credits as part of the [Google Developer Expert program](https://developers.google.com/community/experts)!.  🙌🙌
