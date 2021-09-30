@@ -10,11 +10,17 @@ const Footer = (props) => {
           href="https://developers.google.com/community/experts"
           target="_blank"
           rel="noreferrer"
+          className="text-blue-500 "
         >
           Google Developer Expert
         </a>{" "}
         program!. Demo created by{" "}
-        <a href="https://victordibia.com" target="_blank" rel="noreferrer">
+        <a
+          className="text-blue-500 "
+          href="https://victordibia.com"
+          target="_blank"
+          rel="noreferrer"
+        >
           Victor Dibia
         </a>
         .{" "}

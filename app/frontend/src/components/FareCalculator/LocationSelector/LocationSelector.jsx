@@ -2,6 +2,7 @@ import moment from "moment";
 import { Select, DatePicker, Button, Alert } from "antd";
 import { postJSONData } from "../../helperfunctions/HelperFunctions";
 import { useState } from "react";
+import Icons from "../../helperfunctions/Icons";
 const { Option } = Select;
 
 const LocationSelector = (props) => {
@@ -93,13 +94,6 @@ const LocationSelector = (props) => {
     fetchPredictions(postData);
   }
 
-  <div className="w-full rounded-tl p-2 px-4 absolute bottom-0 right-0 bg-gray-300">
-    <div className="    border-l-0 border-r-0 border-t-0 border-dashed   border-gray-600">
-      Google has generously supported this work by providing Google Cloud
-      credits.
-    </div>
-  </div>;
-
   return (
     zones.length > 0 && (
       <div className="mt-2 shadow   bg-opacity-100">
@@ -107,7 +101,16 @@ const LocationSelector = (props) => {
           <div className="font-semibold pb-1">Welcome!</div>
           <div className="w-64 text-sm">
             This page demonstrates how a machine learning model can be used to
-            predict trip time and fare taxi rides in New York.
+            predict trip time and fare taxi rides in New York. Learn more on{" "}
+            <a
+              rel="noreferrer"
+              href="https://github.com/victordibia/taxi/"
+              target="_blank"
+              className="group text-blue-500 -mt-2 inline-block   transition duration-1000 hover:text-indigo-200"
+            >
+              {" "}
+              Github.
+            </a>
           </div>
         </div>
 
